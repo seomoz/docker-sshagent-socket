@@ -1,0 +1,29 @@
+# Shares SSH agent credentials, so within a "docker build", the building container
+# can access private Github repos. This script brings up the auxiliary container which
+# shares the credentials, then stops it when the command you want to run is done.
+#
+# Usage: "docker-wrap.sh docker build -t foo .", "docker-wrap.sh docker-compose build",
+#        "docker-wrap.sh roger deploy -e stage myproject myconfig.yml", etc.
+#
+# Note: should be used with extreme care on shared computers! You could be exposing your
+# credentials for all on the local system to share.
+#
+# Also, due to the hard-coding of the container name and ports, only one of this script
+# can be running at one time.
+#
+# Uses seomoz/sshagent-socket (forked from aidanhs/sshagent-socket) to forward
+# SSH agent to make it available inside a container running `docker build`
+
+if ! docker run -d -p $(ifconfig|grep -1 docker0|tail -n 1|cut -d: -f2|awk '{print $1}'):5522:5522 -v $(dirname $SSH_AUTH_SOCK):/s$(dirname $SSH_AUTH_SOCK) --name=dsshagent seomoz/sshagent-socket $SSH_AUTH_SOCK
+then
+  echo "ERROR -- couldnt start dsshagent"
+  exit 1
+fi
+
+"$@"
+
+exitcode=$?
+
+docker rm -f dsshagent
+
+exit $exitcode

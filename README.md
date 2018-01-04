@@ -13,7 +13,9 @@ docker run -d -v $(dirname $SSH_AUTH_SOCK):/s$(dirname $SSH_AUTH_SOCK) --name=ds
 ```
 (it may ask you to add `$SSH_AUTH_SOCK` at the end of the line)
 
-you can add the following lines to a Dockerfile for an image with `socat`
+See [docker-wrap.sh](docker-wrap.sh) for a more ready-to-go script that brings up a forwarding container, runs a command (such as `docker build -t myproject .`), and removes the forwarding container.
+
+You can add the following lines to a Dockerfile for an image with `socat`
 installed
 
 ```
