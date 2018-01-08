@@ -2,8 +2,8 @@
 # can access private Github repos. This script brings up the auxiliary container which
 # shares the credentials, then stops it when the command you want to run is done.
 #
-# Usage: "docker-wrap.sh docker build -t foo .", "docker-wrap.sh docker-compose build",
-#        "docker-wrap.sh roger deploy -e stage myproject myconfig.yml", etc.
+# Usage: "docker-forward-ssh-agent docker build -t foo .", "docker-forward-ssh-agent docker-compose build",
+#        "docker-forward-ssh-agent roger deploy -e stage myproject myconfig.yml", etc.
 #
 # Note: should be used with extreme care on shared computers! You could be exposing your
 # credentials for all on the local system to share.
