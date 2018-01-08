@@ -13,6 +13,9 @@
 #
 # Uses seomoz/sshagent-socket (forked from aidanhs/sshagent-socket) to forward
 # SSH agent to make it available inside a container running `docker build`
+#
+# See https://github.com/seomoz/docker-sshagent-socket/ for more info on how to
+# configure your Docker file to work with this.
 
 if ! docker run -d -p $(ifconfig|grep -1 docker0|tail -n 1|cut -d: -f2|awk '{print $1}'):5522:5522 -v $(dirname $SSH_AUTH_SOCK):/s$(dirname $SSH_AUTH_SOCK) --name=dsshagent seomoz/sshagent-socket $SSH_AUTH_SOCK
 then
